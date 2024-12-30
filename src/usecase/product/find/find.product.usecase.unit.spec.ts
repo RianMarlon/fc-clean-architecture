@@ -31,10 +31,13 @@ describe("Unit test for find product use case", () => {
   });
 
   it("should throw an error if the product is not found", async () => {
-    jest.spyOn(productRepositoryMock, "find").mockResolvedValueOnce(null);
+    jest.spyOn(productRepositoryMock, "find").mockImplementationOnce(() => {
+      throw new Error("Product not found");
+    });
     const input: InputFindProductDto = {
       id: "abc",
     };
+
     await expect(findProductUseCase.execute(input)).rejects.toThrow(
       "Product not found"
     );
