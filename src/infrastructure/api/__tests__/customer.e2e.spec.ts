@@ -143,6 +143,8 @@ describe("E2E test for customer", () => {
             zip: "12344",
           },
         });
+      expect(updateCustomerResponse.status).toBe(200);
+
       const customerUpdated = updateCustomerResponse.body;
       expect(customerUpdated.id).toBe(customer.id);
       expect(customerUpdated.name).toBe("Jane 2");
