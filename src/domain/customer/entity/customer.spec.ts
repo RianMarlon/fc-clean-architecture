@@ -15,20 +15,26 @@ describe("Customer unit tests", () => {
     expect(() => {
       const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
       let customer = Customer.create("", "John", address);
-    }).toThrow("Id is required");
+    }).toThrow("customer: Id is required");
   });
 
   it("should throw error when name is empty", () => {
     expect(() => {
       const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
       let customer = Customer.create("123", "", address);
-    }).toThrow("Name is required");
+    }).toThrow("customer: Name is required");
   });
 
-  it("should throw error when address is not informed", () => {
+  it("should throw error when address is empty", () => {
     expect(() => {
       let customer = Customer.create("123", "John", null);
-    }).toThrow("Address is required");
+    }).toThrow("customer: Address is required");
+  });
+
+  it("should throw error when id and name are empty", () => {
+    expect(() => {
+      let customer = Customer.create("123", "", null);
+    }).toThrow("customer: Name is required,customer: Address is required");
   });
 
   it("should change name", () => {
