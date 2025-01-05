@@ -3,8 +3,6 @@ import ProductRepositoryInterface from "../../../domain/product/repository/produ
 import { InputUpdateProductDto } from "./update.product.dto";
 import { UpdateProductUseCase } from "./update.product.usecase";
 
-const productMock = new Product("123", "Product", 43);
-
 describe("Unit test for update product use case", () => {
   let updateProductUseCase: UpdateProductUseCase;
   let productRepositoryMock: ProductRepositoryInterface;
@@ -12,7 +10,7 @@ describe("Unit test for update product use case", () => {
   beforeEach(() => {
     productRepositoryMock = {
       findAll: jest.fn(),
-      find: jest.fn().mockResolvedValue(productMock),
+      find: jest.fn().mockResolvedValue(new Product("123", "Product", 43)),
       create: jest.fn(),
       update: jest.fn(),
     };
@@ -57,7 +55,7 @@ describe("Unit test for update product use case", () => {
     };
 
     await expect(updateProductUseCase.execute(input)).rejects.toThrow(
-      "Name is required"
+      "product: Name is required"
     );
   });
 
@@ -69,7 +67,19 @@ describe("Unit test for update product use case", () => {
     };
 
     await expect(updateProductUseCase.execute(input)).rejects.toThrow(
-      "Price must be greater or equal than zero"
+      "product: Price must be greater or equal than zero"
+    );
+  });
+
+  it("should throw an error if the name is empty and the price is lower than zero", async () => {
+    const input: InputUpdateProductDto = {
+      id: "324",
+      name: "",
+      price: -9,
+    };
+
+    await expect(updateProductUseCase.execute(input)).rejects.toThrow(
+      "product: Name is required,product: Price must be greater or equal than zero"
     );
   });
 });

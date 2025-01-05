@@ -60,7 +60,7 @@ describe("Integration test for UpdateProductUseCase", () => {
     );
   });
 
-  it("should throw an error if the name is missing", async () => {
+  it("should throw an error if the name is empty", async () => {
     const productToCreate = new Product("123", "Product", 10);
     await productRepository.create(productToCreate);
 
@@ -71,7 +71,7 @@ describe("Integration test for UpdateProductUseCase", () => {
     };
 
     await expect(updateProductUseCase.execute(input)).rejects.toThrow(
-      "Name is required"
+      "product: Name is required"
     );
   });
 
@@ -85,7 +85,21 @@ describe("Integration test for UpdateProductUseCase", () => {
       price: -2,
     };
     await expect(updateProductUseCase.execute(input)).rejects.toThrow(
-      "Price must be greater or equal than zero"
+      "product: Price must be greater or equal than zero"
+    );
+  });
+
+  it("should throw an error if the name is empty and price is lower than zero", async () => {
+    const productToCreate = new Product("123", "Product", 10);
+    await productRepository.create(productToCreate);
+
+    const input: InputUpdateProductDto = {
+      id: "123",
+      name: "",
+      price: -2,
+    };
+    await expect(updateProductUseCase.execute(input)).rejects.toThrow(
+      "product: Name is required,product: Price must be greater or equal than zero"
     );
   });
 });
