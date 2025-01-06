@@ -51,6 +51,13 @@ describe("Customer unit tests", () => {
     customer.changeAddress(newAddress);
   });
 
+  it("should change name and address", () => {
+    const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
+    const customer = Customer.create("123", "John", address);
+    const newAddress = new Address("Street 1", 123, "13330-250", "São Paulo");
+    customer.changeNameAndAddress("New name", newAddress);
+  });
+
   it("should activate customer", () => {
     const address = new Address("Street 1", 1, "Zipcode 1", "City 1");
     const customer = Customer.create("1", "Customer 1", address);

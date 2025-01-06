@@ -14,10 +14,6 @@ export default class Customer extends Entity {
     this._name = name;
     this._address = address;
     this.validate();
-
-    if (this._notification.hasErrors()) {
-      throw new NotificationError(this._notification.getErrors());
-    }
   }
 
   static create(id: string, name: string, address: Address): Customer {
@@ -69,10 +65,19 @@ export default class Customer extends Entity {
         message: "Id is required",
       });
     }
+    if (this._notification.hasErrors()) {
+      throw new NotificationError(this._notification.getErrors());
+    }
   }
 
   changeName(name: string) {
     this._name = name;
+    this.validate();
+  }
+
+  changeNameAndAddress(name: string, address: Address) {
+    this._name = name;
+    this._address = address;
     this.validate();
   }
 
