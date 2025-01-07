@@ -6,18 +6,18 @@ export default class Address {
   _number: number = 0;
   _zip: string = "";
   _city: string = "";
-  _notification: Notification;
+  notification: Notification;
 
   constructor(street: string, number: number, zip: string, city: string) {
     this._street = street;
     this._number = number;
     this._zip = zip;
     this._city = city;
-    this._notification = new Notification();
+    this.notification = new Notification();
 
     this.validate();
-    if (this._notification.hasErrors()) {
-      throw new NotificationError(this._notification.getErrors());
+    if (this.notification.hasErrors()) {
+      throw new NotificationError(this.notification.getErrors());
     }
   }
 
@@ -39,25 +39,25 @@ export default class Address {
 
   validate() {
     if (!this._street) {
-      this._notification.addError({
+      this.notification.addError({
         message: "Street is required",
         context: "customer",
       });
     }
     if (!this._number) {
-      this._notification.addError({
+      this.notification.addError({
         message: "Number is required",
         context: "customer",
       });
     }
     if (!this._zip) {
-      this._notification.addError({
+      this.notification.addError({
         message: "Zip is required",
         context: "customer",
       });
     }
     if (!this._city) {
-      this._notification.addError({
+      this.notification.addError({
         message: "City is required",
         context: "customer",
       });

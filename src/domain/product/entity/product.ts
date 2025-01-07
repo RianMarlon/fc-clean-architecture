@@ -45,28 +45,28 @@ export default class Product extends Entity implements ProductInterface {
 
   validate() {
     if (!this._id) {
-      this._notification.addError({
+      this.notification.addError({
         context: "product",
         message: "Id is required",
       });
     }
 
     if (!this._name) {
-      this._notification.addError({
+      this.notification.addError({
         context: "product",
         message: "Name is required",
       });
     }
 
     if (this._price < 0) {
-      this._notification.addError({
+      this.notification.addError({
         context: "product",
         message: "Price must be greater or equal than zero",
       });
     }
 
-    if (this._notification.hasErrors()) {
-      throw new NotificationError(this._notification.getErrors());
+    if (this.notification.hasErrors()) {
+      throw new NotificationError(this.notification.getErrors());
     }
   }
 }
