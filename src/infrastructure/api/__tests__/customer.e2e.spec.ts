@@ -101,6 +101,25 @@ describe("E2E test for customer", () => {
       expect(customerById.address.city).toBe("City");
       expect(customerById.address.number).toBe(123);
       expect(customerById.address.zip).toBe("12345");
+
+      const findCustomerResponseXML = await request(app)
+        .get(`/customer/${customerCreated.id}`)
+        .set("Accept", "application/xml")
+        .send();
+
+      expect(findCustomerResponseXML.status).toBe(200);
+      expect(findCustomerResponseXML.text).toContain(
+        '<?xml version="1.0" encoding="UTF-8"'
+      );
+      expect(findCustomerResponseXML.text).toContain("<customer>");
+      expect(findCustomerResponseXML.text).toContain("<name>John</name>");
+      expect(findCustomerResponseXML.text).toContain("<address>");
+      expect(findCustomerResponseXML.text).toContain("<street>Street</street>");
+      expect(findCustomerResponseXML.text).toContain("<city>City</city>");
+      expect(findCustomerResponseXML.text).toContain("<number>123</number>");
+      expect(findCustomerResponseXML.text).toContain("<zip>12345</zip>");
+      expect(findCustomerResponseXML.text).toContain("</address>");
+      expect(findCustomerResponseXML.text).toContain("</customer>");
     });
 
     it("should return status code 500 when the customer is not found", async () => {
@@ -129,6 +148,31 @@ describe("E2E test for customer", () => {
       expect(createCustomerResponse.body.address.city).toBe("City");
       expect(createCustomerResponse.body.address.number).toBe(123);
       expect(createCustomerResponse.body.address.zip).toBe("12345");
+
+      const createCustomerResponseXML = await request(app)
+        .post("/customer")
+        .set("Accept", "application/xml")
+        .send({
+          name: "John",
+          address: {
+            street: "Street",
+            city: "City",
+            number: 123,
+            zip: "12345",
+          },
+        });
+
+      expect(createCustomerResponseXML.text).toContain("<customer>");
+      expect(createCustomerResponseXML.text).toContain("<name>John</name>");
+      expect(createCustomerResponseXML.text).toContain("<address>");
+      expect(createCustomerResponseXML.text).toContain(
+        "<street>Street</street>"
+      );
+      expect(createCustomerResponseXML.text).toContain("<city>City</city>");
+      expect(createCustomerResponseXML.text).toContain("<number>123</number>");
+      expect(createCustomerResponseXML.text).toContain("<zip>12345</zip>");
+      expect(createCustomerResponseXML.text).toContain("</address>");
+      expect(createCustomerResponseXML.text).toContain("</customer>");
     });
 
     it("should return status code 500 when the customer is not created", async () => {
@@ -174,6 +218,33 @@ describe("E2E test for customer", () => {
       expect(customerUpdated.address.city).toBe("City 2");
       expect(customerUpdated.address.number).toBe(1234);
       expect(customerUpdated.address.zip).toBe("12344");
+
+      const updateCustomerResponseXML = await request(app)
+        .put(`/customer/${customer.id}`)
+        .set("Accept", "application/xml")
+        .send({
+          name: "Jane 3",
+          address: {
+            street: "Street 3",
+            city: "City 3",
+            number: 12356,
+            zip: "12345",
+          },
+        });
+
+      expect(updateCustomerResponseXML.text).toContain("<customer>");
+      expect(updateCustomerResponseXML.text).toContain("<name>Jane 3</name>");
+      expect(updateCustomerResponseXML.text).toContain("<address>");
+      expect(updateCustomerResponseXML.text).toContain(
+        "<street>Street 3</street>"
+      );
+      expect(updateCustomerResponseXML.text).toContain("<city>City 3</city>");
+      expect(updateCustomerResponseXML.text).toContain(
+        "<number>12356</number>"
+      );
+      expect(updateCustomerResponseXML.text).toContain("<zip>12345</zip>");
+      expect(updateCustomerResponseXML.text).toContain("</address>");
+      expect(updateCustomerResponseXML.text).toContain("</customer>");
     });
 
     it("should not update a customer", async () => {
