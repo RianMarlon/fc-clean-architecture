@@ -4,6 +4,10 @@ import ProductRepository from "../../product/repository/sequelize/product.reposi
 import { FindProductUseCase } from "../../../usecase/product/find/find.product.usecase";
 import { CreateProductUseCase } from "../../../usecase/product/create/create.product.usecase";
 import { UpdateProductUseCase } from "../../../usecase/product/update/update.product.usecase";
+import { ListProductPresenter } from "../presenters/products/list.product.presenter";
+import { FindProductPresenter } from "../presenters/products/find.product.presenter";
+import { CreateProductPresenter } from "../presenters/products/create.product.presenter";
+import { UpdateProductPresenter } from "../presenters/products/update.product.presenter";
 
 export const productRouter = express.Router();
 
@@ -11,7 +15,10 @@ productRouter.get("/", async (req: Request, res: Response) => {
   const usecase = new ListProductUseCase(new ProductRepository());
   try {
     const output = await usecase.execute({});
-    res.send(output);
+    res.format({
+      json: async () => res.send(output),
+      xml: async () => res.send(ListProductPresenter.toXML(output)),
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
@@ -25,7 +32,10 @@ productRouter.get("/:id", async (req: Request, res: Response) => {
     const output = await usecase.execute({
       id,
     });
-    res.send(output);
+    res.format({
+      json: async () => res.send(output),
+      xml: async () => res.send(FindProductPresenter.toXML(output)),
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -39,7 +49,10 @@ productRouter.post("/", async (req: Request, res: Response) => {
       price: req.body.price,
     };
     const output = await usecase.execute(createProductDto);
-    res.send(output);
+    res.format({
+      json: async () => res.send(output),
+      xml: async () => res.send(CreateProductPresenter.toXML(output)),
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -55,7 +68,10 @@ productRouter.put("/:id", async (req: Request, res: Response) => {
       price: req.body.price,
     };
     const output = await usecase.execute(updateCustomerDto);
-    res.send(output);
+    res.format({
+      json: async () => res.send(output),
+      xml: async () => res.send(UpdateProductPresenter.toXML(output)),
+    });
   } catch (error) {
     res.status(500).send(error);
   }
